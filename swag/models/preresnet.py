@@ -26,6 +26,13 @@ __all__ = ["PreResNet110", "PreResNet56", "PreResNet8", "PreResNet83", "PreResNe
 	 'PreResNet38FashionMNIST',
 	 'PreResNet44FashionMNIST',
 	 'PreResNet50FashionMNIST',
+	 'PreResNet2',
+	 'PreResNet8',
+	 'PreResNet14',
+	 'PreResNet20',
+	 'PreResNet26',
+	 'PreResNet32',
+	 'PreResNet38',
 ]
 
 
@@ -391,4 +398,61 @@ class PreResNet50FashionMNIST:
     kwargs = {"depth": 50, "input_channels": 1}
     transform_train = fmnist_transform
     transform_test = fmnist_transform
+
+
+""" and for cifar 10/100"""
+class PreResNet2:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 2}
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
+
+
+class PreResNet8:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 8}
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
+
+
+class PreResNet14:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 14}
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
+
+
+class PreResNet20:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 20}
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
+
+
+class PreResNet26:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 26}
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
+
+
+class PreResNet32:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 32}
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
+
+
+class PreResNet38:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 38}
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
 
