@@ -7,7 +7,26 @@ import torch.nn as nn
 import torchvision.transforms as transforms
 import math
 
-__all__ = ["PreResNet110", "PreResNet56", "PreResNet8", "PreResNet83", "PreResNet164"]
+__all__ = ["PreResNet110", "PreResNet56", "PreResNet8", "PreResNet83", "PreResNet164",
+	 'PreResNet2MNIST',
+	 'PreResNet8MNIST',
+	 'PreResNet14MNIST',
+	 'PreResNet20MNIST',
+	 'PreResNet26MNIST',
+	 'PreResNet32MNIST',
+	 'PreResNet38MNIST',
+	 'PreResNet44MNIST',
+	 'PreResNet50MNIST',
+	 'PreResNet2FashionMNIST',
+	 'PreResNet8FashionMNIST',
+	 'PreResNet14FashionMNIST',
+	 'PreResNet20FashionMNIST',
+	 'PreResNet26FashionMNIST',
+	 'PreResNet32FashionMNIST',
+	 'PreResNet38FashionMNIST',
+	 'PreResNet44FashionMNIST',
+	 'PreResNet50FashionMNIST',
+]
 
 
 def conv3x3(in_planes, out_planes, stride=1):
@@ -89,8 +108,9 @@ class Bottleneck(nn.Module):
 
 
 class PreResNet(nn.Module):
-    def __init__(self, num_classes=10, depth=110):
+    def __init__(self, num_classes=10, depth=110, input_channels=3):
         super(PreResNet, self).__init__()
+        num_classes = int(num_classes)
         if depth >= 44:
             assert (depth - 2) % 9 == 0, "depth should be 9n+2"
             n = (depth - 2) // 9
@@ -101,7 +121,7 @@ class PreResNet(nn.Module):
             block = BasicBlock
 
         self.inplanes = 16
-        self.conv1 = nn.Conv2d(3, 16, kernel_size=3, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(input_channels, 16, kernel_size=3, padding=1, bias=False)
         self.layer1 = self._make_layer(block, 16, n)
         self.layer2 = self._make_layer(block, 32, n, stride=2)
         self.layer3 = self._make_layer(block, 64, n, stride=2)
@@ -154,112 +174,221 @@ class PreResNet(nn.Module):
 
         return x
 
+cifar_transform_train = transforms.Compose(
+        [
+            transforms.Resize(32),
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+        ]
+    )
+cifar_transform_test = transforms.Compose(
+    [
+        transforms.Resize(32),
+        transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+    ]
+)
+
+mnist_transform = transforms.Compose(
+        [
+            transforms.Pad(2), # pad to 32, 32
+            transforms.ToTensor(),
+            transforms.Normalize((0.1305,), (0.3081,))
+        ]
+)
+
+fmnist_transform = transforms.Compose(
+        [
+            transforms.Pad(2), # pad to 32, 32
+            transforms.ToTensor(),
+            transforms.Normalize((0.2859,), (0.3530,))
+        ]
+)
+
+
 
 class PreResNet164:
     base = PreResNet
     args = list()
     kwargs = {"depth": 164}
-    transform_train = transforms.Compose(
-        [
-            transforms.Resize(32),
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ]
-    )
-    transform_test = transforms.Compose(
-        [
-            transforms.Resize(32),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ]
-    )
-
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
 
 class PreResNet110:
     base = PreResNet
     args = list()
     kwargs = {"depth": 110}
-    transform_train = transforms.Compose(
-        [
-            transforms.Resize(32),
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ]
-    )
-    transform_test = transforms.Compose(
-        [
-            transforms.Resize(32),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ]
-    )
-
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
 
 class PreResNet83:
     base = PreResNet
     args = list()
     kwargs = {"depth": 83}
-    transform_train = transforms.Compose(
-        [
-            transforms.Resize(32),
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ]
-    )
-    transform_test = transforms.Compose(
-        [
-            transforms.Resize(32),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ]
-    )
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
 
 
 class PreResNet56:
     base = PreResNet
     args = list()
     kwargs = {"depth": 56}
-    transform_train = transforms.Compose(
-        [
-            transforms.Resize(32),
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ]
-    )
-    transform_test = transforms.Compose(
-        [
-            transforms.Resize(32),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ]
-    )
-
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
 
 class PreResNet8:
     base = PreResNet
     args = list()
     kwargs = {"depth": 8}
-    transform_train = transforms.Compose(
-        [
-            transforms.Resize(32),
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ]
-    )
-    transform_test = transforms.Compose(
-        [
-            transforms.Resize(32),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ]
-    )
+    transform_train = cifar_transform_train
+    transform_test = cifar_transform_test
+
+
+"""
+Some class configurations for MNIST specifically
+"""
+
+class PreResNet2MNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 2, "input_channels": 1}
+    transform_train = mnist_transform
+    transform_test = mnist_transform
+
+
+class PreResNet8MNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 8, "input_channels": 1}
+    transform_train = mnist_transform
+    transform_test = mnist_transform
+
+
+class PreResNet14MNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 14, "input_channels": 1}
+    transform_train = mnist_transform
+    transform_test = mnist_transform
+
+
+class PreResNet20MNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 20, "input_channels": 1}
+    transform_train = mnist_transform
+    transform_test = mnist_transform
+
+
+class PreResNet26MNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 26, "input_channels": 1}
+    transform_train = mnist_transform
+    transform_test = mnist_transform
+
+
+class PreResNet32MNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 32, "input_channels": 1}
+    transform_train = mnist_transform
+    transform_test = mnist_transform
+
+
+class PreResNet38MNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 38, "input_channels": 1}
+    transform_train = mnist_transform
+    transform_test = mnist_transform
+
+
+class PreResNet44MNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 44, "input_channels": 1}
+    transform_train = mnist_transform
+    transform_test = mnist_transform
+
+class PreResNet50MNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 50, "input_channels": 1}
+    transform_train = mnist_transform
+    transform_test = mnist_transform
+
+""" and for fashion MNIST"""
+
+class PreResNet2FashionMNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 2, "input_channels": 1}
+    transform_train = fmnist_transform
+    transform_test = fmnist_transform
+
+
+class PreResNet8FashionMNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 8, "input_channels": 1}
+    transform_train = fmnist_transform
+    transform_test = fmnist_transform
+
+
+class PreResNet14FashionMNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 14, "input_channels": 1}
+    transform_train = fmnist_transform
+    transform_test = fmnist_transform
+
+
+class PreResNet20FashionMNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 20, "input_channels": 1}
+    transform_train = fmnist_transform
+    transform_test = fmnist_transform
+
+
+class PreResNet26FashionMNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 26, "input_channels": 1}
+    transform_train = fmnist_transform
+    transform_test = fmnist_transform
+
+
+class PreResNet32FashionMNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 32, "input_channels": 1}
+    transform_train = fmnist_transform
+    transform_test = fmnist_transform
+
+
+class PreResNet38FashionMNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 38, "input_channels": 1}
+    transform_train = fmnist_transform
+    transform_test = fmnist_transform
+
+
+class PreResNet44FashionMNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 44, "input_channels": 1}
+    transform_train = fmnist_transform
+    transform_test = fmnist_transform
+
+class PreResNet50FashionMNIST:
+    base = PreResNet
+    args = []
+    kwargs = {"depth": 50, "input_channels": 1}
+    transform_train = fmnist_transform
+    transform_test = fmnist_transform
+

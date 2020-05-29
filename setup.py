@@ -22,7 +22,7 @@ setup(
     license="MPL-2.0",
     packages=["swag"],
     install_requires=[
-        "tqdm==4.26.0",
+        "tqdm==4.19.9",
         "numpy>=1.14.3",
         "torchvision>=0.2.1",
         "gpytorch>=0.1.0rc4",
